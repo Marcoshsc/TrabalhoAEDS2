@@ -77,7 +77,6 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
         while (!feof(arq)) {
             fseek(arq, (tam + i) * tamanho_registro(), SEEK_SET);
             v[i] = le_funcionario(arq);
-            imprime_funcionario(v[i]);
             i++;
             if(i>=M) break;
         }
@@ -89,12 +88,12 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
         while(i > 0) {
             printf("Entrou no while\n");
 
-            char newNome[50];
+            char* newNome = malloc(5 * sizeof(char));
             if(*numeroNomes > 50)
                 break;
             if(!nomes) {
                 (*numeroNomes)++;
-                sprintf(newNome, "part%d.dat", *numeroNomes);
+                sprintf(newNome, "p%d.dat", *numeroNomes);
                 prev->prox = cria(newNome, NULL);
                 nomes = prev->prox;
             }
@@ -107,24 +106,35 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
                 found[k] = 0;
             }
             
+            int inPartition = 1;
             int inRepository = 0;
             int j = 1;
             int current = findSmaller(v, found, i);
             salva_funcionario(v[current], part);
-            printf("Salvou o %d no arquivo %s.\n", v[current]->cod, nomes->nome);
             found[current] = 1;
-            if(j == i)
-                continue;
+            if(j == i) {
+                fclose(part);
+                if(!prev)
+                    prev = nomes;
+                else
+                    prev = prev->prox;
+                nomes = nomes->prox;
+                break;
+            }
             while(inRepository < n && j < i) {
-                printf("While do inrepository\n");
                 int smaller = findSmaller(v, found, i);
                 found[smaller] = 1;
-                if(smaller < current) {
+                j++;
+                if(v[smaller]->cod < v[current]->cod) {
                     salva_funcionario(v[smaller], repo);
                     inRepository++;
                 }
-                j++;
-                printf("While do inrepository terminou\n");
+                else {
+                    fseek(part, inPartition * tamanho_registro(), SEEK_SET);
+                    salva_funcionario(v[smaller], part);
+                    inPartition++;
+                    current = smaller;
+                }
             }
 
             if(inRepository == 0) {
