@@ -2,6 +2,7 @@
 #include "funcionarios.h"
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 
 #include "particoes.h"
 
@@ -60,6 +61,127 @@ void classificacao_interna(FILE *arq, Lista *nome_arquivos_saida, int M, int nFu
     }
 }
 
-void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, int n){
-    /*PARTE 1 TRABALHO*/
+/*Algoritmo a ser implementado no trabalho de geracao de particoes por Selecao Natural recebe como parâmetro
+o arquivo de dados de entrada, a lista contendo os nomes dos arquivos de saída das partições,
+o númer de elementos M a ser armazenado em cada partição e o número de registro total do arquivo e o tamanho do reservatório.
+Fiquem a vontade para modificar a estrutura, foi uma sugestão.*/
+void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, int n, int* numeroNomes){
+    rewind(arq);
+    Lista* nomes = nome_arquivos_saida;
+    Lista* prev = NULL;
+    FILE* repo = fopen("repository.dat", "w+");
+    for (int tam = 0; tam < nFunc; tam += M)
+    {
+        TFunc *v[M];
+        int i = 0;
+        while (!feof(arq)) {
+            fseek(arq, (tam + i) * tamanho_registro(), SEEK_SET);
+            v[i] = le_funcionario(arq);
+            imprime_funcionario(v[i]);
+            i++;
+            if(i>=M) break;
+        }
+
+        if (i != M) {
+            i = M;
+        }
+
+        while(i > 0) {
+            printf("Entrou no while\n");
+
+            char newNome[50];
+            if(*numeroNomes > 50)
+                break;
+            if(!nomes) {
+                (*numeroNomes)++;
+                sprintf(newNome, "part%d.dat", *numeroNomes);
+                prev->prox = cria(newNome, NULL);
+                nomes = prev->prox;
+            }
+            FILE* part = fopen(nomes->nome, "w+");
+            rewind(part);
+
+            int found[i];
+            for (int k = 0; k < i; k++)
+            {
+                found[k] = 0;
+            }
+            
+            int inRepository = 0;
+            int j = 1;
+            int current = findSmaller(v, found, i);
+            salva_funcionario(v[current], part);
+            printf("Salvou o %d no arquivo %s.\n", v[current]->cod, nomes->nome);
+            found[current] = 1;
+            if(j == i)
+                continue;
+            while(inRepository < n && j < i) {
+                printf("While do inrepository\n");
+                int smaller = findSmaller(v, found, i);
+                found[smaller] = 1;
+                if(smaller < current) {
+                    salva_funcionario(v[smaller], repo);
+                    inRepository++;
+                }
+                j++;
+                printf("While do inrepository terminou\n");
+            }
+
+            if(inRepository == 0) {
+                if(!prev)
+                    prev = nomes;
+                else
+                    prev = prev->prox;
+                nomes = nomes->prox;
+                break;
+            }
+            
+            int newI = 0;
+            TFunc* newV[M];
+            for (int k = 0; k < i; k++)
+            {
+                if(!found[k]) {
+                    newV[k] = v[k];
+                    newI++;
+                }
+            }
+            for (int k = 0; k < inRepository; k++)
+            {
+                fseek(repo, k * tamanho_registro(), SEEK_SET);
+                TFunc* func = le_funcionario(repo);
+                newV[newI] = func;
+                newI++;
+            }
+
+            rewind(repo);
+            inRepository = 0;
+            i = newI;
+            for (int k = 0; k < newI; k++)
+            {
+                v[k] = newV[k];
+            }
+
+            fclose(part);
+            if(!prev)
+                prev = nomes;
+            else
+                prev = prev->prox;
+            nomes = nomes->prox;
+        }
+    }
+    
+}
+
+int findSmaller(TFunc* v[], int found[], int tam) {
+    int smaller = -1;
+    for (int k = 0; k < tam; k++)
+    {
+        if(smaller == -1 && !found[k]) {
+            smaller = k;
+            continue;
+        }
+        if(!found[k] && smaller > v[k]->cod)
+            smaller = k;
+    }
+    return smaller;
 }

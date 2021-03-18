@@ -129,8 +129,8 @@ int main(){
             case (6):
                 if(crioulistadenomes){
                     printf("\n\nGerando partições, utilizando o método selecao natural.\n");
-                    selecao_natural(arq, nomes, nElementos, nFunc,1);
-
+                    selecao_natural(arq, nomes, nElementos, nFunc,1, &nParticoes);
+                    printf("total de %d partições geradas.\n", nParticoes);
                     //salvando o ponteiro para o início da lista de nomes
                     prox = nomes;
                     criouparticoes=1;
