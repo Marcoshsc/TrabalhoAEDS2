@@ -1,7 +1,7 @@
 #ifndef PILHA_H
 #define PILHA_H
 
-#include <funcionarios.h>
+#include "funcionarios.h"
 
 typedef struct pilha {
     TFunc *info;

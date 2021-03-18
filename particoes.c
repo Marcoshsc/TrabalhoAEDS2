@@ -1,9 +1,9 @@
 
-#include <funcionarios.h>
+#include "funcionarios.h"
 #include <stdlib.h>
 #include <limits.h>
 
-#include <particoes.h>
+#include "particoes.h"
 
 void classificacao_interna(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc) {
     rewind(arq); //posiciona cursor no inicio do arquivo

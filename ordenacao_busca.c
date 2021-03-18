@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <funcionarios.h>
+#include "ordenacao_busca.h"
 
 TFunc* busca_binaria(int cod, FILE *arq, int tam) {
     int left = 0, right = tam-1;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "manipulacao_arquivos.h"
 
 typedef struct Funcionario {
   int cod;
@@ -11,9 +12,7 @@ typedef struct Funcionario {
 } TFunc;
 
 void salva(TFunc *func, FILE *out);
-int tamanho_registro();
 TFunc *le(FILE *in);
-int tamanho_arquivo(FILE *arq);
 TFunc* busca_binaria(int cod, FILE *arq, int tam);
 void initialize(FILE* file, int numberRecords);
 void print(TFunc func);
@@ -95,10 +94,6 @@ void salva(TFunc *func, FILE *out) {
   fwrite(&func->salario, sizeof(double), 1, out);
 }
 
-int tamanho_registro() {
-  return sizeof(TFunc);
-}
-
 TFunc *le(FILE *in) {
   TFunc *func = (TFunc *) malloc(sizeof(TFunc));
   if(0 >= fread(&func->cod, sizeof(int), 1, in)) {
@@ -110,10 +105,4 @@ TFunc *le(FILE *in) {
   fread(func->data_nascimento, sizeof(char), sizeof(func->data_nascimento), in);
   fread(&func->salario, sizeof(double), 1, in);
   return func;
-}
-
-int tamanho_arquivo(FILE *arq) {
-  fseek(arq, 0, SEEK_END);
-  int tam = trunc(ftell(arq) / tamanho_registro());
-  return tam;
 }

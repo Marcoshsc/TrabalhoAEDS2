@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <funcionarios.h>
+#include "funcionarios.h"
 #define SEM_FILHO -1
 
 /* Cada nó da árvore binária em memória interna armazena a informação do indice primario,
