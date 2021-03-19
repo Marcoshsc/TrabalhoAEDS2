@@ -87,5 +87,7 @@ void intercalacao_basico(char *nome_arquivo_saida, int num_p, Lista *nome_partic
 
 void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_arquivo_saida, int num_p){
     //implementar segunda parte do trabalho
+
+    
 }
 
