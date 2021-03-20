@@ -130,6 +130,7 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
     for (int i = 0; i < num_p; i++)
     {
         TFunc *func = pop(pilha[i], 0, &vetTop[i]);
+        printf("Saiu o %d, pilha %d\n", func->cod, i);
         hash[func->cod] = func;
         TNoA *no = criaNo_arvore_binaria(func->cod, -1);
         no->pilha = i;
@@ -142,6 +143,7 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
     int iteration = 0;
     int totalElements = 0;
     int totalElementsNovosPais = 0;
+    int funcNoArquivo = 0;
 
     // gera a primeira versao da arvore de vencedores
     while (1) //primeira iteração
@@ -154,6 +156,7 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
             if (i + 1 == sizeToBeUsed)
             {
                 TNoA *no = criaNo_arvore_binaria(toUse[i]->info, -1);
+                no->pilha = toUse[i]->pilha;
                 no->esq = toUse[i];
                 no->dir = NULL;
                 no->esq->pai = no;
@@ -173,6 +176,7 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
             if (toUse[i]->info < toUse[i + 1]->info)
             {
                 TNoA *no = criaNo_arvore_binaria(toUse[i]->info, -1);
+                no->pilha = toUse[i]->pilha;
                 no->esq = toUse[i];
                 no->dir = toUse[i + 1];
                 no->esq->pai = no;
@@ -191,6 +195,7 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
             else
             {
                 TNoA *no = criaNo_arvore_binaria(toUse[i + 1]->info, -1);
+                no->pilha = toUse[i + 1]->pilha;
                 no->esq = toUse[i];
                 no->dir = toUse[i + 1];
                 no->esq->pai = no;
@@ -261,11 +266,21 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
 
         // salvar funcionario no arquivo
         TFunc *func = hash[vencedor];
+        fseek(out, funcNoArquivo * tamanho_registro(), SEEK_SET);
+        funcNoArquivo++;
         salva_funcionario(func, out);
-
+        printf("Pai principal: %d\n", paiPrincipal->info);
+        printf("Salvou o %d\n", func->cod);
         int stack = paiPrincipal->pilha;
 
-        TFunc *func = pop(pilha[stack], 0, &vetTop[stack]);
+        printf("Tamanho: %d\n", vetTop[stack] + 1);
+        printf("Stack: %d\n", stack);
+        func = pop(pilha[stack], 0, &vetTop[stack]);
+        if (func != NULL)
+            printf("Saiu o %d\n", func->cod);
+        else
+            printf("Pilha vazia %d\n", stack);
+        // printf("Retirou da pilha o %d\n", func->cod);
         if (func == NULL)
             curr->info = INT_MAX;
         else
@@ -282,18 +297,26 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
                 if (curr->esq->info < curr->dir->info)
                 {
                     curr->info = curr->esq->info;
+                    curr->pilha = curr->esq->pilha;
                 }
                 else
                 {
                     curr->info = curr->dir->info;
+                    curr->pilha = curr->dir->pilha;
                 }
             }
             else
             {
                 if (curr->esq != NULL)
+                {
                     curr->info = curr->esq->info;
+                    curr->pilha = curr->esq->pilha;
+                }
                 else
+                {
                     curr->info = curr->dir->info;
+                    curr->pilha = curr->dir->pilha;
+                }
             }
         }
     }
