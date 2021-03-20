@@ -34,10 +34,8 @@ TFunc *push(TPilha *pilha, int lim, int *topo, TFunc *info, int p)
 
 TFunc *pop(TPilha *pilha, int base, int *topo)
 {
-    printf("Entrou pop\n");
     if (pilha_vazia(base, *topo))
     {
-        printf("Retornou nulo\n");
         return NULL;
     }
     else
@@ -47,7 +45,6 @@ TFunc *pop(TPilha *pilha, int base, int *topo)
         *topo = *topo - 1;
         return info;
     }
-    printf("Saiu pop\n");
 }
 
 TFunc *peek_func(TPilha *pilha, int base, int *topo)

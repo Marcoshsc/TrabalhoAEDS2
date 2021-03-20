@@ -201,7 +201,6 @@ int main()
                 if (crioupilhas)
                 {
                     intercalacao_arvore_de_vencedores(vetPilhas, vetTopo, "arquivo_intercalado.dat", nParticoes, nFunc);
-                    printf("Saiu do metodo\n");
                 }
                 else
                     printf("As pilhas das partições geradas não foram criadas, crie as pilhas utilizando as opções 7!!!\n");

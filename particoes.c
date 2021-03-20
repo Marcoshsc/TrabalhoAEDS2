@@ -86,7 +86,6 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
         }
 
         while(i > 0) {
-            printf("Entrou no while\n");
 
             char* newNome = malloc(5 * sizeof(char));
             if(*numeroNomes > 50)

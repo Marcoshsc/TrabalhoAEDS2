@@ -16,7 +16,7 @@ void intercalacao_basico(char *nome_arquivo_saida, int num_p, Lista *nome_partic
     //abre arquivo de saida para escrita
     if ((out = fopen(nome_arquivo_saida, "wb")) == NULL)
     {
-        printf("Erro ao abrir arquivo de sa?da\n");
+        printf("Erro ao abrir arquivo de saida\n");
     }
     else
     {
@@ -107,9 +107,6 @@ void intercalacao_basico(char *nome_arquivo_saida, int num_p, Lista *nome_partic
 void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_arquivo_saida, int num_p, int nFunc)
 {
     int baseSize = num_p;
-    int totalLevels = 0;
-    for (int i = baseSize; i > 0; i /= 2)
-        totalLevels++;
 
     FILE *out; //declara ponteiro para arquivo
 
@@ -123,23 +120,23 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         printf("Erro ao abrir arquivo de saida\n");
         return;
     }
-
-    TNoA *base[baseSize];
-    TFunc *hash[nFunc];
+    TNoA **base = malloc(baseSize * sizeof(TNoA*));
+    TFunc **hash = malloc(nFunc * sizeof(TFunc*));
     // cria a base da arvore
     for (int i = 0; i < num_p; i++)
     {
         TFunc *func = pop(pilha[i], 0, &vetTop[i]);
-        printf("Saiu o %d, pilha %d\n", func->cod, i);
         hash[func->cod] = func;
         TNoA *no = criaNo_arvore_binaria(func->cod, -1);
         no->pilha = i;
         base[i] = no;
+        
     }
-    imprime_arvore_binaria(base[0]);
+    
+    
     TNoA *paiPrincipal;
-    TNoA *pais[baseSize];
-    TNoA *novosPais[baseSize];
+    TNoA **pais = malloc(baseSize * sizeof(TNoA*));
+    TNoA **novosPais = malloc(baseSize * sizeof(TNoA*));
     int iteration = 0;
     int totalElements = 0;
     int totalElementsNovosPais = 0;
@@ -152,7 +149,6 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         int sizeToBeUsed = iteration == 0 ? baseSize : totalElements;
         for (int i = 0; i < sizeToBeUsed; i += 2) //cria os nós na primeira iteraçã
         {
-            printf("%d\n", i);
             if (i + 1 == sizeToBeUsed)
             {
                 TNoA *no = criaNo_arvore_binaria(toUse[i]->info, -1);
@@ -215,12 +211,9 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
 
         // atualiza o vetor de pais
         int toCompare = iteration == 0 ? totalElements : totalElementsNovosPais;
-        printf("Numero de pais gerados: %d\n", toCompare);
         if (toCompare == 1)
         {
             paiPrincipal = iteration == 0 ? pais[0] : novosPais[0];
-            imprime_arvore_binaria(paiPrincipal);
-            printf("Saiu\n");
             break;
         }
         if (iteration == 0)
@@ -236,15 +229,12 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         totalElementsNovosPais = 0;
         iteration++;
     }
-
-    print2DUtil(paiPrincipal, 0);
-
-    printf("\n Saiu while %p\n", paiPrincipal);
+ 
+    
     TNoA *curr = paiPrincipal;
 
     while (curr->info != INT_MAX)
     {
-        printf("Curr: %d\n", curr->info);
         int vencedor = paiPrincipal->info;
         // DESCE ATÉ A FOLHA DO NÓ VENCEDOR
         while (curr->esq != NULL || curr->dir != NULL)
@@ -272,18 +262,9 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         fseek(out, funcNoArquivo * tamanho_registro(), SEEK_SET);
         funcNoArquivo++;
         salva_funcionario(func, out);
-        printf("Vencedor: %d\n", vencedor);
-        printf("Pai principal: %d\n", paiPrincipal->info);
-        printf("Salvou o %d\n", func->cod);
         int stack = paiPrincipal->pilha;
 
-        printf("Tamanho: %d\n", vetTop[stack] + 1);
-        printf("Stack: %d\n", stack);
         func = pop(pilha[stack], 0, &vetTop[stack]);
-        if (func != NULL)
-            printf("Saiu o %d\n", func->cod);
-        else
-            printf("Pilha vazia %d\n", stack);
         // printf("Retirou da pilha o %d\n", func->cod);
         if (func == NULL)
             curr->info = INT_MAX;
@@ -297,9 +278,6 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         while (curr->pai != NULL)
         {
             curr = curr->pai;
-            if(curr->pai == NULL) {
-                printf("nessa iteração ta na cabeça\n");
-            }
             int prevValue = curr->info;
             if (curr->esq && curr->dir)
             {
@@ -326,22 +304,12 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
                     curr->info = curr->dir->info;
                     curr->pilha = curr->dir->pilha;
                 }
-            }
-            if(curr->esq && curr->dir) {
-                printf("O pai tinha o valor de %d, esquerda %d, direita %d, agora o pai vale %d.\n", prevValue, curr->esq->info, curr->dir->info, curr->info);
-            }
-            else {
-                if (curr->esq != NULL)
-                {
-                    printf("O pai tinha o valor de %d, esquerda %d, direita não tem, agora o pai vale %d.\n", prevValue, curr->esq->info, curr->info);
-
-                }
-                else
-                {
-                    printf("O pai tinha o valor de %d, esquerda não tem, direita %d, agora o pai vale %d.\n", prevValue, curr->dir->info, curr->info);
-                }
-            }
+            } 
             
         }
     }
+    free(base);
+    free(hash);
+    free(pais);
+    free(novosPais);
 }
