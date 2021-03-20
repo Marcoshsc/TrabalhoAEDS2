@@ -3,6 +3,7 @@
 
 typedef struct Lista {
 	char *nome;
+	int tamanho;
 	struct Lista *prox;
 } Lista;
 

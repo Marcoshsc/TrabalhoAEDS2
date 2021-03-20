@@ -30,6 +30,8 @@ typedef struct No{
 /*cria uma árvore binária vazia inicializando o nó raiz com null, com nenhum elemento */
 TNoA *inicializa_arvore_binaria();
 
+void print2DUtil(TNoA *root, int space);
+
 /*função que verifica se uma árvore é vazia */
 int  vazia_arvore_binaria(TNoA* t);
 

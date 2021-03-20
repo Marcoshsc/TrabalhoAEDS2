@@ -163,16 +163,17 @@ int main()
                     //abrindo primeira partição para leitura
                     FILE *part = fopen(nomes->nome, "rb+");
                     printf("Partição %s \n", nomes->nome);
+                    int tamanho = nomes->tamanho == -1 ? nElementos : nomes->tamanho + 1;
                     nomes = nomes->prox;
                     //imprimindo os funcionários gravados nas partições
                     imprime_base_dados_funcionarios(part, nElementos);
                     //inicializando os topos das pilhas
                     vetTopo[p] = -1;
                     //criando pilha através da leitura da partição
-                    cria_pilha_particao(vetPilhas[p], part, nElementos, &vetTopo[p]);
-                    printf("Gerou a pilha")
-                        //fechando a partição
-                        fclose(part);
+                    cria_pilha_particao(vetPilhas[p], part, tamanho, &vetTopo[p]);
+                    printf("Gerou a pilha");
+                    //fechando a partição
+                    fclose(part);
                 }
                 crioupilhas = 1;
                 nomes = prox;

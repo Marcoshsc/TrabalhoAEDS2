@@ -237,11 +237,14 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         iteration++;
     }
 
+    print2DUtil(paiPrincipal, 0);
+
     printf("\n Saiu while %p\n", paiPrincipal);
     TNoA *curr = paiPrincipal;
 
     while (curr->info != INT_MAX)
     {
+        printf("Curr: %d\n", curr->info);
         int vencedor = paiPrincipal->info;
         // DESCE ATÉ A FOLHA DO NÓ VENCEDOR
         while (curr->esq != NULL || curr->dir != NULL)
@@ -269,6 +272,7 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
         fseek(out, funcNoArquivo * tamanho_registro(), SEEK_SET);
         funcNoArquivo++;
         salva_funcionario(func, out);
+        printf("Vencedor: %d\n", vencedor);
         printf("Pai principal: %d\n", paiPrincipal->info);
         printf("Salvou o %d\n", func->cod);
         int stack = paiPrincipal->pilha;
@@ -288,10 +292,15 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
             curr->info = func->cod;
             hash[func->cod] = func;
         }
+            // print2DUtil(paiPrincipal, 0);
         // ATUALIZA A ÁRVORE DE VENCEDORES COM O NOVO VALOR E JÁ O COMPARA COM OS VALORES ALI JÁ PRESENTES
         while (curr->pai != NULL)
         {
             curr = curr->pai;
+            if(curr->pai == NULL) {
+                printf("nessa iteração ta na cabeça\n");
+            }
+            int prevValue = curr->info;
             if (curr->esq && curr->dir)
             {
                 if (curr->esq->info < curr->dir->info)
@@ -318,6 +327,21 @@ void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_a
                     curr->pilha = curr->dir->pilha;
                 }
             }
+            if(curr->esq && curr->dir) {
+                printf("O pai tinha o valor de %d, esquerda %d, direita %d, agora o pai vale %d.\n", prevValue, curr->esq->info, curr->dir->info, curr->info);
+            }
+            else {
+                if (curr->esq != NULL)
+                {
+                    printf("O pai tinha o valor de %d, esquerda %d, direita não tem, agora o pai vale %d.\n", prevValue, curr->esq->info, curr->info);
+
+                }
+                else
+                {
+                    printf("O pai tinha o valor de %d, esquerda não tem, direita %d, agora o pai vale %d.\n", prevValue, curr->dir->info, curr->info);
+                }
+            }
+            
         }
     }
 }

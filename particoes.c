@@ -111,6 +111,7 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
             int j = 1;
             int current = findSmaller(v, found, i);
             salva_funcionario(v[current], part);
+            nomes->tamanho++;
             found[current] = 1;
             if(j == i) {
                 fclose(part);
@@ -132,6 +133,7 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
                 else {
                     fseek(part, inPartition * tamanho_registro(), SEEK_SET);
                     salva_funcionario(v[smaller], part);
+                    nomes->tamanho++;
                     inPartition++;
                     current = smaller;
                 }

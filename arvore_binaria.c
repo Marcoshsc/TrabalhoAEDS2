@@ -11,13 +11,39 @@ int vazia_arvore_binaria(TNoA *t)
     return t == NULL;
 }
 
+    // Function to print binary tree in 2D 
+// It does reverse inorder traversal 
+void print2DUtil(TNoA *root, int space) 
+{ 
+    // Base case 
+    if (root == NULL) 
+        return; 
+  
+    // Increase distance between levels 
+    space += 10; 
+  
+    // Process right child first 
+    print2DUtil(root->dir, space); 
+  
+    // Print current node after space 
+    // count 
+    printf("\n"); 
+    for (int i = 10; i < space; i++) 
+        printf(" "); 
+    printf("%d\n", root->info); 
+  
+    // Process left child 
+    print2DUtil(root->esq, space); 
+}
+
 void imprime_arvore_binaria(TNoA *nodo)
 {
     printf("<");                     /* notação para organizar na hora de mostrar os elementos */
     if (!vazia_arvore_binaria(nodo)) /* se a árvore não for vazia... */
     {
         /* Mostra os elementos em pré-ordem */
-        printf("%d ", nodo->info);         /* mostra a raiz */
+        printf("%d ", nodo->info); 
+        printf("\n");        /* mostra a raiz */
         imprime_arvore_binaria(nodo->esq); /* mostra a sae (subárvore à esquerda) */
         imprime_arvore_binaria(nodo->dir); /* mostra a sad (subárvore à direita) */
     }
