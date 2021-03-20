@@ -11,6 +11,8 @@ o valor rrn/byteoffset no arquivo, o ponteiro para subárvore à esquerda e à d
 typedef struct noA {
     int info;
     int rrn;
+    int pilha;
+    struct noA *pai;
     struct noA *esq;
     struct noA *dir;
 } TNoA;

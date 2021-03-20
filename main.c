@@ -175,7 +175,7 @@ int main(){
                 printf("Método a ser implementado na parte I do trabalho.\n");
                 if(criouparticoes){
                     if(crioupilhas){
-                        intercalacao_arvore_de_vencedores(vetPilhas, vetTopo, "arquivo_intercalado.dat", nParticoes);
+                        intercalacao_arvore_de_vencedores(vetPilhas, vetTopo, "arquivo_intercalado.dat", nParticoes, nFunc);
                         printf("Saiu do metodo\n");
                     }else printf("As pilhas das partições geradas não foram criadas, crie as pilhas utilizando as opções 7!!!\n");
                 }else printf("Partições não foram criadas, crie as partições utilizando as opções 5 ou 6  do menu!!!\n");

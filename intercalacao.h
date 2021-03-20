@@ -18,6 +18,6 @@ void intercalacao_basico(char *nome_arquivo_saida, int num_p, Lista *nome_partic
 
 /* Algoritmo de intercalacao de particoes usando arvore de vencedores a ser implementado no trabalho,
  fiquem a vontade para modificar a estrutura dos parâmetros, somente uma sugestão*/
-void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_arquivo_saida, int num_p);
+void intercalacao_arvore_de_vencedores(TPilha **pilha, int *vetTop, char *nome_arquivo_saida, int num_p, int nFunc);
 
 #endif

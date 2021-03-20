@@ -71,6 +71,7 @@ TNoA *criaNo_arvore_binaria(int chave, int rrn)
     novo = (TNoA *)malloc(sizeof(TNoA));
     novo->info = chave;
     novo->rrn = rrn;
+    novo->pai = NULL;
     novo->esq = NULL;
     novo->dir = NULL;
     return novo;
