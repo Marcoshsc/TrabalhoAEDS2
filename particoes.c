@@ -87,10 +87,10 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
 
         while(i > 0) {
 
-            char* newNome = malloc(5 * sizeof(char));
             if(*numeroNomes > 50)
                 break;
             if(!nomes) {
+                char* newNome = malloc(5 * sizeof(char));
                 (*numeroNomes)++;
                 sprintf(newNome, "p%d.dat", *numeroNomes);
                 prev->prox = cria(newNome, NULL);
