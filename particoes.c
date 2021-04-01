@@ -114,8 +114,6 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
         int code = v[smaller]->cod;
         free(v[smaller]);
         v[smaller] = getFuncionario(arq, &totalLidos);
-        
-        smaller = findSmaller(v, inVet);
 
         if(v[smaller]->cod < code) {
             fseek(repo, inRepo * tamanho_registro(), SEEK_SET);
