@@ -1,7 +1,8 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-typedef struct Lista {
+typedef struct Lista
+{
 	char *nome;
 	int tamanho;
 	struct Lista *prox;
@@ -9,6 +10,9 @@ typedef struct Lista {
 
 /*imprime lista de nomes*/
 void imprime(Lista *nomes);
+
+/* imprime blocos */
+void imprimeBlocos(Lista *nomes);
 
 /*aloca copia de str*/
 char *cria_str(char *str);

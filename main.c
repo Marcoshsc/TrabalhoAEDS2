@@ -11,9 +11,11 @@
 #include "particoes.h"
 #include "intercalacao.h"
 #include "arvore_binaria.h"
+#include "arvore_b+.h"
 
 int menu()
 {
+
     int op;
 
     printf("\n\n**************MENU************** \n\nBASE DE DADOS\n");
@@ -248,10 +250,12 @@ int main()
                 printf("Base de dados inexistente para ser ordenada, crie utilizando a opção 1 do menu!!!\n");
             break;
         case (12):
+
             printf("Método a ser implementado na parte II do trabalho.\n");
+            criaBMais("arquivo_intercalado.dat", 2, nFunc);
+
             if (crioubase == 1)
             {
-                ; //criar_arvore_B();
             }
             else
                 printf("Base de dados inexistente para ser ordenada, crie utilizando a opção 1 do menu!!!\n");
